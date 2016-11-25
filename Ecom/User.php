@@ -20,12 +20,61 @@ class User {
 		$this->db = new db();
 	}
 
-	private function checkDetails(){
+	public function checkDetails()
+	{
 		$errors = array();
-		if(empty($this->username) && empty($this->email) && empty($this->password) && empty($this->phone)){
+
+		if(empty($this->username) || empty($this->email) || empty($this->password) || empty($this->phone)){
 			$errors[] = 'Please fill in some details';
-			return $errors;
+		} else {
+
+			$serializeData = $this->serializeData();
+			if($serializeData[0] == 1)
+			{
+				$errors[] = 1;
+			} else {
+				foreach ($serializeData as $key => $value) {
+					$errors[] = $value;
+				}
+			}
 		}
+
+		return $errors;
+	}
+
+	private function serializeData()
+	{
+		$errors = array();
+
+		if(!empty(trim($this->username)) && !empty(trim($this->email)) && !empty(trim($this->password)) && !empty(trim($this->phone)))
+		{
+			if(!filter_var($this->email, FILTER_VALIDATE_EMAIL))
+			{
+				$errors[] = 'Please enter a valid Email Address!';
+			}
+
+			if(strlen($this->username) > 40) 
+			{
+				$errors[] = 'Name too long!';
+			}
+
+			if(!ctype_digit($this->phone))
+			{
+				$errors[] = 'Please enter a valid Phone!';
+			}
+
+			if(strlen($this->password) > 40)
+			{
+				$errors[] = 'Password Too Long!';
+			}
+
+			if(empty($errors))
+			{
+				$errors[] = 1;
+			} 
+		}
+
+		return $errors;
 	}
 
 	public function checkUsername($username)
@@ -44,14 +93,6 @@ class User {
 			}
 		} else {
 			echo "Username is empty!";
-		}
-	}
-
-	public function checkPassword()
-	{
-		if(!empty(trim($this->password)) == true)
-		{
-			echo '<br> Password is '. $this->password;
 		}
 	}
 
@@ -74,14 +115,6 @@ class User {
 			
 			}
 
-		}
-	}
-
-	public function setErrors($errors)
-	{
-		if(!empty($errors) == true)
-		{
-			die($errors);
 		}
 	}
 }

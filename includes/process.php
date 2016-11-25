@@ -14,5 +14,17 @@
 
 		$user 		= new user($name, $email, $password, $phone);
 		
-		$user->loginUser($name,$email,$password,$phone);
+		$userDetails = $user->checkDetails();
+
+		//print_r($userDetails);
+		if($userDetails[0] == 1){
+			// There are no errors in Validation
+
+			$user->loginUser($name,$email,$password,$phone);
+
+		} else {
+			print_r($userDetails);
+		}
+		//$user->loginUser($name,$email,$password,$phone);
+
 	}	

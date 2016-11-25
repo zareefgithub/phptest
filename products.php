@@ -5,5 +5,4 @@
 
 		 $products = new products();	
 
-
-		 $products->getAllProducts();
+		 echo 'Welcome User : '. $username;

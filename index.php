@@ -1,8 +1,5 @@
 	<?php require_once __DIR__ .'\includes\autoload.php'; ?>
 
-	<?php //use Ecom\Database as db; ?>
-	<?php// use Ecom\User as user; ?>	
-
 	<div class="container" style="margin: 0 auto; max-width:1000px; min-height:600px; height: 700px;">
 
 		<div class="form">
@@ -15,3 +12,4 @@
 			</form>
 		</div>
 	</div>
+
