@@ -16,15 +16,16 @@
 		
 		$userDetails = $user->checkDetails();
 
-		//print_r($userDetails);
 		if($userDetails[0] == 1){
 			// There are no errors in Validation
 
 			$user->loginUser($name,$email,$password,$phone);
-
 		} else {
-			print_r($userDetails);
+			session_start();
+			foreach ($userDetails as $key => $value) {
+				$_SESSION['errorMessage'][] = $value;
+			}
+			header("Location:/phptest/");
 		}
-		//$user->loginUser($name,$email,$password,$phone);
 
 	}	

@@ -28,15 +28,23 @@ class User {
 			$errors[] = 'Please fill in some details';
 		} else {
 
-			$serializeData = $this->serializeData();
-			if($serializeData[0] == 1)
+			$serializeData 	= $this->serializeData();
+			$checkEmail 	= $this->checkEmail();
+		
+			if($checkEmail[0] != 1)
 			{
-				$errors[] = 1;
+				$errors[] = $checkEmail[0];
 			} else {
-				foreach ($serializeData as $key => $value) {
-					$errors[] = $value;
+				if(!$serializeData[0] == 1)
+				{
+					$errors[] = 1;
+				} else {
+					foreach ($serializeData as $key => $value) {
+						$errors[] = $value;
+					}
 				}
 			}
+			
 		}
 
 		return $errors;
@@ -77,23 +85,23 @@ class User {
 		return $errors;
 	}
 
-	public function checkUsername($username)
+	private function checkEmail()
 	{
-		$error = array();
-		if(!empty(trim($username)) == true)
+		$errors = array();
+
+		if(!empty(trim($this->email)) == true)
 		{
 
-			$query = $this->db->query('SELECT count(*) FROM user WHERE `name` = "'.$username.'" ');
-			print_r($query);
-			if(!$this->db->affectedRows($query) > 0){
-				$this->setErrors('Username not Found!');
-				echo 'asd';
+			$query = $this->db->query('SELECT * FROM user WHERE `email` = "'.$this->email.'" ');
+	
+			if($this->db->affectedRows($query) >= 1){
+				$errors[] = 'That email is already taken!';
 			} else {
-				echo 'asda';
+				$errors[] = 1;
 			}
-		} else {
-			echo "Username is empty!";
 		}
+
+		return $errors;
 	}
 
 	public function loginUser($username, $email, $password, $phone)
@@ -116,5 +124,20 @@ class User {
 			}
 
 		}
+	}
+	public function getNameById($id)
+	{
+		$errors = array();
+
+		if(!empty(trim($id))) 
+		{
+			$id 	= $this->db->escapeString($id);
+			$query 	= $this->db->query('SELECT `name` FROM `user` WHERE `user_id` = '.$id.'');
+			$result = $this->db->fetchAssoc($query);
+			
+			return $result['name'];
+		}	
+
+		return $errors;
 	}
 }
